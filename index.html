@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QKD Симулятор: 100 идей для Беларуси (NEO)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter Font -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a; /* Черный фон */
+            color: #e5e7eb; /* Светлый текст по умолчанию */
+        }
+        /* Неоновые Акценты */
+        .text-neo-cyan { color: #00bcd4; } /* Яркий Неоновый Голубой */
+        .text-neo-green { color: #34d399; } /* Яркий Неоновый Зеленый */
+        .bg-neo-cyan { background-color: #00bcd4; }
+        .bg-dark-card { background-color: #1a1a1a; } /* Темно-серый для карточек */
+        
+        /* Переопределение старых переменных для нео-стиля */
+        .text-quantum-blue { color: #00bcd4; } 
+        .bg-quantum-green { background-color: #34d399; }
+        .bg-quantum-dark { background-color: #0a0a0a; }
+
+        /* Эффект свечения */
+        .hover-lift {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            /* Свечение карточек */
+            box-shadow: 0 0 10px rgba(0, 188, 212, 0.5), 0 0 20px rgba(0, 188, 212, 0.3);
+        }
+        .glow-button {
+            box-shadow: 0 0 5px rgba(0, 188, 212, 0.8), 0 0 10px rgba(0, 188, 212, 0.5);
+            transition: all 0.3s ease-in-out;
+        }
+        .glow-button:hover {
+            box-shadow: 0 0 15px rgba(0, 188, 212, 1), 0 0 25px rgba(0, 188, 212, 0.7);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Firebase SDK Imports (Required for the platform environment) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global variables provided by the Canvas environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        if (firebaseConfig) {
+            try {
+                const app = initializeApp(firebaseConfig);
+                const db = getFirestore(app);
+                const auth = getAuth(app);
+                setLogLevel('Debug'); // Enable Firestore logging
+
+                // Authentication
+                onAuthStateChanged(auth, async (user) => {
+                    if (!user) {
+                        // Sign in using the custom token if available, otherwise anonymously
+                        try {
+                            if (initialAuthToken) {
+                                await signInWithCustomToken(auth, initialAuthToken);
+                                console.log("Firebase signed in with custom token.");
+                            } else {
+                                await signInAnonymously(auth);
+                                console.log("Firebase signed in anonymously.");
+                            }
+                        } catch (error) {
+                            console.error("Firebase Auth error:", error);
+                        }
+                    }
+                });
+            } catch (e) {
+                console.error("Firebase initialization failed:", e);
+            }
+        } else {
+            console.warn("Firebase config not available. Database features will be inactive.");
+        }
+    </script>
+    <!-- End Firebase Setup -->
+
+    <!-- Header / Navigation -->
+    <header class="bg-gray-900 shadow-xl shadow-cyan-500/20 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-neo-cyan">Проект QKD | 100 идей для Беларуси</h1>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#about" class="text-gray-300 hover:text-neo-cyan transition duration-300">Актуальность</a>
+                <a href="#simulator" class="text-gray-300 hover:text-neo-cyan transition duration-300">Протокол BB84</a>
+                <a href="#future" class="text-gray-300 hover:text-neo-cyan transition duration-300">Дальнейшее развитие</a>
+                <a href="#author" class="text-gray-300 hover:text-neo-cyan transition duration-300">Автор</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="bg-quantum-dark text-white py-24 sm:py-32 border-b border-neo-cyan/30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <p class="text-xl sm:text-2xl font-semibold mb-4 text-neo-green">Республиканский молодежный проект «100 идей для Беларуси»</p>
+                <h2 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6 leading-tight text-neo-cyan">
+                    Симулятор Квантового Распределения Ключей (QKD)
+                </h2>
+                <p class="text-2xl sm:text-3xl font-light max-w-4xl mx-auto mb-10 text-gray-300">
+                    Обеспечение технологического суверенитета и информационной гипербезопасности Республики Беларусь в условиях грядущей «квантовой угрозы».
+                </p>
+                <a href="#simulator" class="inline-flex items-center justify-center px-8 py-4 border border-neo-cyan text-lg font-medium rounded-full shadow-lg text-white bg-neo-cyan hover:bg-opacity-90 transition duration-300 hover-lift glow-button">
+                    Узнать о Новизне Проекта →
+                </a>
+            </div>
+        </section>
+
+        <!-- Актуальность и Новизна (Actuality and Novelty) -->
+        <section id="about" class="py-16 sm:py-24 bg-gray-900">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="lg:grid lg:grid-cols-3 lg:gap-12">
+                    <div class="lg:col-span-1 mb-10 lg:mb-0">
+                        <h3 class="text-sm font-semibold text-neo-green uppercase tracking-wider mb-2">Номинация: ИКТ</h3>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-white">
+                            Квантовая Угроза: Почему это Критически Важно?
+                        </h2>
+                    </div>
+                    <div class="lg:col-span-2 space-y-8 text-lg text-gray-300">
+                        <div class="p-6 bg-dark-card rounded-xl shadow-xl border-t-4 border-red-600 hover-lift">
+                            <p class="font-bold text-xl text-red-400 mb-2">Глобальный Риск</p>
+                            <p>Существующие криптографические алгоритмы (RSA, AES) в ближайшее десятилетие станут <span class="font-bold text-white">уязвимы</span> перед мощностью квантовых компьютеров. Эта угроза ставит под вопрос безопасность всей стратегической информационной инфраструктуры страны.</p>
+                        </div>
+                        <div class="p-6 bg-dark-card rounded-xl shadow-xl border-t-4 border-neo-cyan hover-lift">
+                            <p class="font-bold text-xl text-neo-cyan mb-2">Цель Проекта</p>
+                            <p>Проект напрямую нацелен на подготовку высококвалифицированных кадров и создание отечественного, неимпортируемого инструментария для исследования и внедрения <span class="font-bold text-white">постквантовой</span> криптографии в Республике Беларусь.</p>
+                        </div>
+                        <div class="p-6 bg-dark-card rounded-xl shadow-xl border-t-4 border-neo-green hover-lift">
+                            <p class="font-bold text-xl text-neo-green mb-2">Решение</p>
+                            <p>QKD (Квантовое Распределение Ключей) – единственный известный метод, который гарантирует <span class="font-bold text-white">абсолютную безопасность</span> обмена ключами, используя фундаментальные законы квантовой механики.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Протокол BB84 и Главная Гипотеза (Simulator Core) -->
+        <section id="simulator" class="bg-quantum-dark text-white py-16 sm:py-24 border-t border-neo-green/30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl sm:text-5xl font-extrabold mb-4 text-neo-cyan">Наш Симулятор: Протокол BB84</h2>
+                    <p class="text-xl text-gray-400">Действующий программный прототип на базе Python и Qiskit.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-10">
+                    <!-- Hypothesis Card -->
+                    <div class="p-8 bg-dark-card rounded-2xl shadow-xl border-t-4 border-neo-green hover-lift">
+                        <div class="flex items-center mb-4">
+                            <!-- Quantum Icon (SVG) -->
+                            <svg class="w-8 h-8 text-neo-green mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.996 17c-2.348 0-4.25-1.902-4.25-4.25S9.648 8.5 11.996 8.5s4.25 1.902 4.25 4.25S14.344 17 11.996 17zM12 21a9 9 0 100-18 9 9 0 000 18zM12 22.5A10.5 10.5 0 111.5 12 10.5 10.5 0 0112 22.5z"></path></svg>
+                            <h3 class="text-2xl font-bold text-white">Главная Гипотеза</h3>
+                        </div>
+                        <p class="text-lg leading-relaxed text-gray-300">
+                            "Любая попытка подслушивателя (Евы) перехватить и измерить квантовые состояния кубитов <span class="font-bold text-white">неизбежно внесёт возмущения</span>, что будет обнаружено через значительный рост частоты битовых ошибок (QBER)."
+                        </p>
+                    </div>
+
+                    <!-- Stage Card -->
+                    <div class="p-8 bg-dark-card rounded-2xl shadow-xl border-t-4 border-neo-cyan hover-lift">
+                        <div class="flex items-center mb-4">
+                            <!-- Code Icon (SVG) -->
+                            <svg class="w-8 h-8 text-neo-cyan mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                            <h3 class="text-2xl font-bold text-white">Стадия Развития</h3>
+                        </div>
+                        <ul class="text-lg leading-relaxed text-gray-300 list-disc pl-5 space-y-2">
+                            <li><span class="font-bold text-white">Действующий программный прототип (MVP)</span>.</li>
+                            <li>Полная реализация протокола BB84 на <span class="font-bold text-white">Python</span> с использованием библиотеки <span class="font-bold text-white">Qiskit</span>.</li>
+                            <li>Проведены первичные испытания и <span class="font-bold text-white">доказана основная гипотеза</span> через анализ QBER.</li>
+                            <li><span class="font-bold text-white">Отечественная разработка</span> без необходимости импортозамещения.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Дальнейшее Развитие (Future Vision) -->
+        <section id="future" class="py-16 sm:py-24 bg-gray-900">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Стратегия: Путь к Гипербезопасности</h2>
+                    <p class="mt-4 text-xl text-gray-400">Наш проект – это платформа для НИР и образовательного процесса в Республике Беларусь.</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Card 1: Education -->
+                    <div class="bg-dark-card p-6 rounded-xl shadow-xl border-b-4 border-neo-green hover-lift">
+                        <p class="text-3xl font-extrabold text-neo-green mb-3">01</p>
+                        <h4 class="text-xl font-bold text-white mb-2">Наука и Образование</h4>
+                        <p class="text-gray-300">Использование симулятора как <span class="font-bold text-white">учебного пособия</span> и платформы для лабораторных работ на профильных факультетах (например, БГУИР) для подготовки специалистов в области квантовой кибербезопасности.</p>
+                    </div>
+
+                    <!-- Card 2: Research -->
+                    <div class="bg-dark-card p-6 rounded-xl shadow-xl border-b-4 border-neo-cyan hover-lift">
+                        <p class="text-3xl font-extrabold text-neo-cyan mb-3">02</p>
+                        <h4 class="text-xl font-bold text-white mb-2">Содействие в НИР</h4>
+                        <p class="text-gray-300">Содействие в налаживании контактов с профильными лабораториями (БГУИР, НАН Беларуси) для развития симулятора в платформу для отработки <span class="font-bold text-white">гибридных криптосистем</span>.</p>
+                    </div>
+
+                    <!-- Card 3: IDPS -->
+                    <div class="bg-dark-card p-6 rounded-xl shadow-xl border-b-4 border-neo-green hover-lift">
+                        <p class="text-3xl font-extrabold text-neo-green mb-3">03</p>
+                        <h4 class="text-xl font-bold text-white mb-2">Квантовые IDPS</h4>
+                        <p class="text-gray-300">Разработка концепции использования аномального повышения QBER (частоты битовых ошибок) как <span class="font-bold text-white">активного индикатора обнаружения вторжения</span> (Intrusion Detection/Prevention System).</p>
+                    </div>
+                </div>
+
+                <div class="mt-12 text-center">
+                    <!-- Обновленная служебная почта -->
+                    <a href="mailto:rommaxcontact@gmail.com" class="inline-flex items-center justify-center px-6 py-3 border border-neo-cyan text-base font-medium rounded-lg shadow-sm text-white bg-neo-cyan hover:bg-opacity-90 transition duration-300 glow-button">
+                        Связаться для Сотрудничества
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Автор и Контакты (Author) -->
+        <section id="author" class="bg-quantum-dark py-16 sm:py-24 border-t border-neo-cyan/30">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-8">Автор</h2> <!-- Изменен заголовок -->
+                <div class="space-y-8">
+                    <!-- Author Card -->
+                    <div class="p-6 bg-dark-card rounded-xl shadow-xl border-t-4 border-neo-cyan">
+                        <p class="text-xl font-bold text-neo-cyan">Максимов Роман Викторович</p>
+                        <!-- Удалены класс и школа -->
+                        <p class="mt-3 text-sm text-gray-500">
+                            <!-- Удален телефон, обновлен email -->
+                            Email: rommaxcontact@gmail.com
+                        </p>
+                    </div>
+
+                    <!-- Удалена карточка Научного руководителя -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 border-t border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-lg font-semibold mb-2 text-neo-cyan">Проект представлен на Республиканский молодежный проект «100 идей для Беларуси»</p>
+            <p class="text-sm text-gray-400">&copy; 2025. Все права на симулятор QKD принадлежат автору.</p>
+        </div>
+    </footer>
+
+    <!-- Simple JavaScript for Smooth Scrolling -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
